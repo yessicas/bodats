@@ -1,0 +1,29 @@
+table td, table th {
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+    border: 1px solid #87A1A2;
+    font-size: 9px;
+}
+
+th {
+	font-weight: bold;
+	color:white;
+}
+
+td{
+	color: black;
+}
+
+.row-fluid .spancenter {
+    width: 65.4468%;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+
+    margin: 1px 0px -1px 0px;
+}
+
+h6{
+	color : green;
+	font-size: 11px;
+}

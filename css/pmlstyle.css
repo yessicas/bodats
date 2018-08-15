@@ -1,0 +1,9 @@
+table td, table th {
+	padding: 0px 0px;
+}
+
+h3{
+	padding:0px;
+	margin:0px;
+	color: red;
+}

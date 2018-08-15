@@ -1,0 +1,2 @@
+UPDATE `fleet`.`purchase_order` SET `PONumber` = 'PO/0053/PML/V/2015',
+`PONo` = '53' WHERE `purchase_order`.`id_purchase_order` =35;

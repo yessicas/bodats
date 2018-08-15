@@ -1,0 +1,11 @@
+assets/*
+protected/runtime/*
+protected/extensions/*
+protected/widgets/*
+protected/vendors/*
+protected/db/old/*
+
+protected/repository/excel/*
+protected/repository/company/*
+protected/repository/cv/*
+protected/repository/users/*

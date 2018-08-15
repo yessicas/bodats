@@ -1,0 +1,5 @@
+INSERT INTO `fleetclone`.`crew_position` (`id_crew_position` ,`crew_position` ,`is_important` ,`minimum_req` ,`description`)
+VALUES ('8', 'A/B 2', '1', '0', 'Crew Kapal');
+
+
+UPDATE `fleetclone`.`crew_position` SET `id_crew_position` = '9' WHERE `crew_position`.`id_crew_position` =8;

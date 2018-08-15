@@ -1,0 +1,1 @@
+ALTER TABLE `voyage_mst_activity` ADD `id_mst_timesheet_summary` INT( 11 ) NOT NULL AFTER `id_voyage_activity` 

@@ -1,0 +1,6 @@
+SELECT a.id_purchase_request_detail, a.id_purchase_request, a.id_item, a.quantity, a.metric,
+b.id_consumable_stock_item, b. consumable_stock_category, b.consumable_stock_item
+FROM `purchase_request_detail` a
+LEFT JOIN consumable_stock_item b ON a.id_item = b.id_consumable_stock_item
+WHERE a.`purchase_item_table` = "ConsumableStockItem"
+AND b.id_consumable_stock_item IS NULL

@@ -1,0 +1,1 @@
+INSERT INTO `fleetclone`.`po_category` (`id_po_category`, `code`, `category`, `category_name`, `id_parent`, `is_end_node`, `level1`, `level2`, `level3`, `num_level`, `auth`, `type_good_issue`, `dedicated_to`, `lead_time_from_approval`, `request_by`) VALUES ('21300', '2.13', 'JASA', 'Transport Fuel', '20000', '1', '2', '12', '0', '2', 'NAU', 'AUTO', 'VOYAGE', '0', '');

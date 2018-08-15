@@ -1,0 +1,283 @@
+<?php
+$this->breadcrumbs=array(
+	'Purchase Requests'=>array('index'),
+	'Manage',
+);
+
+	if($approved == 1){
+		$statapproved = true;
+		$statrejected = false;
+		$alertype = "warning";
+	}
+		
+	if($approved == 0){
+		$statapproved = false;
+		$statrejected = true;
+		$alertype = "error";
+	}
+	
+	$TypePR = $model->TypePR;
+	$SubTitle = "Purchase Request (PR)";
+	if($TypePR  == "IM"){
+		$SubTitle = "Internal Memo (IM)";
+	}
+
+	$this->menu=array(
+		array('label'=>$TypePR.' '.TextDisplayHelper::displayLabelFromMode($label),'url'=>array('purchaserequest/prothers/mode/'.$label)),
+		array('label'=>'Manage '.$TypePR.' '.TextDisplayHelper::displayLabelFromMode($label),'url'=>array('purchaserequest/admothers/mode/'.$label)),
+		array('label'=>'Approved '.$TypePR.' '.TextDisplayHelper::displayLabelFromMode($label),'url'=>array('purchaserequest/admothersapproved/mode/'.$label.'/approved/1'), 'active'=>$statapproved),
+		array('label'=>'Rejected '.$TypePR.' '.TextDisplayHelper::displayLabelFromMode($label),'url'=>array('purchaserequest/admothersapproved/mode/'.$label.'/approved/0'), 'active'=>$statrejected),
+	);
+
+Yii::app()->clientScript->registerScript('search', "
+$('.search-button').click(function(){
+$('.search-form').toggle();
+return false;
+});
+$('.search-form form').submit(function(){
+$.fn.yiiGridView.update('purchase-request-grid', {
+data: $(this).serialize()
+});
+return false;
+});
+");
+?>
+
+<style>
+.labelclass{
+color:#cd5934;
+}
+
+.labelclass:hover{
+text-decoration:underline;
+}
+</style>
+
+
+<script type="text/javascript">
+
+	function approve(id_purchase_request)
+	{
+	//alert(id_purchase_request);
+		var text = "<?php echo Yii::t('strings','Are You Sure Approve This Data???')?>";
+		var jawab;
+
+		jawab = confirm(text)
+		if(jawab)
+		{
+		jQuery.ajax({'type':'post','success':allFine,'url':'<?php echo Yii::app()->request->baseUrl; ?>/purchaserequest/approve/id/'+id_purchase_request,'cache':false,'data':jQuery(this).parents("form").serialize()});return false;
+		return false;
+		}
+	}
+
+	function reject(id_purchase_request)
+	{
+	//alert(id_purchase_request);
+
+
+		var text = "<?php echo Yii::t('strings','Are You Sure Reject This Data???')?>";
+		var jawab;
+
+		jawab = confirm(text)
+		if(jawab)
+		{
+			jQuery.ajax({'type':'post','success':allFine,'url':'<?php echo Yii::app()->request->baseUrl; ?>/purchaserequest/reject/id/'+id_purchase_request,'cache':false,'data':jQuery(this).parents("form").serialize()});return false;
+			return false;
+		}
+
+	}
+   
+	function allFine(data) {
+		$.fn.yiiGridView.update('purchase-request-grid', {
+		data: $(this).serialize()
+		});
+
+		 $("#results").html(data);
+					
+	}
+</script>
+
+
+<div id="content">
+<?php
+	$lbl = "";
+	if($approved == 1)
+		$lbl='approved';
+		
+	if($approved == 0)
+		$lbl='rejected';
+?>
+<h2><?php echo ucwords($lbl); ?> <?php echo $SubTitle; ?> - <?php echo TextDisplayHelper::displayLabelFromMode($label); ?></h2>
+<hr>
+</div>
+
+<div id='results'></div>
+<div class="alert alert-block alert-<?php echo $alertype; ?>">This table inform about <?php echo $SubTitle; ?> datas that has been <?php echo $lbl; ?>. It can't be changed again.</div>
+<?php
+if(Yii::app()->user->hasFlash('success')):?>
+
+<div class = "animated flash">
+	<?php
+    $this->widget('bootstrap.widgets.TbAlert', array(
+    'block' => true,
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'alerts' => array( // configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'), 
+
+    ),
+	));
+	?>
+</div>
+
+<?php endif; ?>
+
+<?php $this->widget('bootstrap.widgets.TbGridView',array(
+'id'=>'purchase-request-grid',
+'dataProvider'=>$model->searchothers(),
+'type' => 'striped bordered condensed',
+'filter'=>$model,
+'columns'=>array(
+		//'id_purchase_request',
+         array(
+        'header'=>'No',    'value'=>'$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+            ),
+		'PRNumber',
+		array(
+                'name'=>'PRDate',
+                'value'=>'Yii::app()->dateFormatter->formatDateTime($data->PRDate, "medium","")',
+                ),
+		//'PRDate',
+		//'PRNo',
+		//'PRMonth',
+		//'PRYear',
+		
+		//'id_po_category',
+
+        array(  
+                'name'=>'id_po_category',
+                'value'=>'$data->PoCategory->category_name',
+				/*
+				'filter'=>CHtml::listData(PoCategory::model()->findAll(array(
+					   'condition' => 'id_parent = :id_parent',
+					   'params' => array(
+						   ':id_parent' => "10400",
+					   ),
+				   )), 'id_po_category', 'category_name'),
+                */     
+				'filter'=>false,				
+
+             ),
+
+		//'amount',
+		//'metric',
+		/*
+        array(  
+                'name'=>'metric',
+                'value'=>'$data->MetricPr->metric_name',
+                //'filter'=>CHtml::listData(MstMetricPr::model()->findAll(), 'metric', 'metric_name'),   
+				'filter'=>false,
+
+             ),
+			*/
+		array(
+            'header'=>'Amount',
+           'value'=>function($data){
+				if(isset($data->MetricPr)){
+					return $data->amount." ".$data->MetricPr->metric_name;
+				}else{
+					return $data->amount;
+				}
+			},
+           ),
+		//'dedicated_to',
+		//'id_vessel',
+       
+		//'id_voyage_order',
+		'notes',
+
+		//'is_mutliple_item',
+		//'requested_user',
+		//'requested_date',
+		//'ip_user_requested',
+		//'Status',
+        array(  
+                'name'=>'Status',
+                //'filter'=>array('PR'=>'PR','PR APPROVED'=>'PR APPROVED', 'PR REJECTED'=>'PR REJECTED', 'PO'=>'PO','GOOD RECEIVE','GOOD RECEIVE'),
+				'filter'=>false,
+                ),
+
+		//'approved_user',
+		//'approval_date',
+		//'ip_user_approved',
+		
+		array(
+		 'class'=>'bootstrap.widgets.TbButtonColumn',
+		 'buttons'=>array(
+			'view'=>array('url'=>'Yii::app()->createUrl("purchaserequest/viewprvessel", array("id"=>$data->id_purchase_request, "mode"=>"'.$label.'"))'),
+			'update'=>array('visible'=>'false'),
+			'delete'=>array('visible'=>'false'),
+			),
+		
+		),
+),
+)); ?> 
+
+<?php 
+$this->widget('application.extensions.fancybox.EFancyBox', array(
+    'target'=>'.popup_foto',
+    'config'=>array(
+        'maxWidth'    => 800,
+        'maxHeight'   => 600,
+        'fitToView'   => false,
+        'width'       => 400,
+        'height'      => 'auto',
+        'autoSize'    => false,
+        'closeClick'  => false,
+        'closeBtn'    =>true,  
+      
+       //'title'=>'dfsf',
+        
+        'helpers'=>array(
+            'title'=>array( 'type' => 'inside' ), // inside or outside
+            'overlay'=>array( 'closeClick' => false ), 
+         
+        ),
+        'openEffect'  => 'elastic',
+        'closeEffect' => 'elastic',
+      
+
+    ),
+));
+?>
+
+<?php
+
+$this->widget('application.extensions.fancybox.EFancyBox', array(
+    'target'=>'.various',
+    'config'=>array(
+        'maxWidth'    => 800,
+        'maxHeight'   => 600,
+        'fitToView'   => false,
+        'width'       => 400,
+        'height'      => 'auto',
+        'autoSize'    => false,
+        'closeClick'  => false,
+        'closeBtn'    =>true,  
+      
+       //'title'=>'dfsf',
+        
+        'helpers'=>array(
+            'title'=>false, // inside or outside
+            'overlay'=>array( 'closeClick' => false ), 
+         
+        ),
+        'openEffect'  => 'elastic',
+        'closeEffect' => 'elastic',
+      
+
+    ),
+));
+?>
+

@@ -1,0 +1,5 @@
+ALTER TABLE  `schedule` ADD  `SchNumber` VARCHAR( 200 ) NOT NULL AFTER  `status_breakdown` ,
+ADD  `SchNo` INT( 11 ) NOT NULL AFTER  `SchNumber` ,
+ADD  `SchMonth` INT( 2 ) NOT NULL AFTER  `SchNo` ,
+ADD  `SchYear` INT( 4 ) NOT NULL AFTER  `SchMonth`;
+

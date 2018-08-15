@@ -1,0 +1,34 @@
+INSERT INTO `fleetclone`.`voyage_mst_activity` 
+(`id_voyage_activity`, `id_mst_timesheet_summary`, `voyage_activity`, `voyage_activity_desc`, `type`, `color`) 
+VALUES ('21', '1', 'SLW', 'Stand By Low Water Level', 'DURATION', '');
+
+INSERT INTO `fleetclone`.`voyage_mst_activity` 
+(`id_voyage_activity`, `id_mst_timesheet_summary`, `voyage_activity`, `voyage_activity_desc`, `type`, `color`) 
+VALUES ('22', '1', 'Wps', 'Waiting Passing', 'DURATION', '');
+
+INSERT INTO `fleetclone`.`voyage_mst_activity` 
+(`id_voyage_activity`, `id_mst_timesheet_summary`, `voyage_activity`, `voyage_activity_desc`, `type`, `color`) 
+VALUES ('23', '1', 'GR', 'Grounded', 'DURATION', '');
+
+
+INSERT INTO `fleetclone`.`voyage_mst_activity` 
+(`id_voyage_activity`, `id_mst_timesheet_summary`, `voyage_activity`, `voyage_activity_desc`, `type`, `color`) 
+VALUES ('24', '5', 'WDC', 'Waiting Discharge', 'DURATION', '');
+
+INSERT INTO `fleetclone`.`voyage_mst_activity`
+(`id_voyage_activity`, `id_mst_timesheet_summary`, `voyage_activity`, `voyage_activity_desc`, `type`, `color`) 
+VALUES ('25', '5', 'CO', 'Cast Off', 'DURATION', '');
+
+
+Merubah type menjadi Duration ( karena harus ada waktunya)
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'DURATION' WHERE `voyage_mst_activity`.`id_voyage_activity` =8;
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'DURATION' WHERE `voyage_mst_activity`.`id_voyage_activity` =9;
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'DURATION' WHERE `voyage_mst_activity`.`id_voyage_activity` =10;
+
+
+Merubah type menjadi point  (Unvailable Time)
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'POINT' WHERE `voyage_mst_activity`.`id_voyage_activity` =15;
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'POINT' WHERE `voyage_mst_activity`.`id_voyage_activity` =16;
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'POINT' WHERE `voyage_mst_activity`.`id_voyage_activity` =17;
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'POINT' WHERE `voyage_mst_activity`.`id_voyage_activity` =19;
+UPDATE `fleet`.`voyage_mst_activity` SET `type` = 'POINT' WHERE `voyage_mst_activity`.`id_voyage_activity` =20;

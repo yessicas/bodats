@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `timesheet_plan` (
+  `id_timesheet` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_voyage_order` bigint(20) NOT NULL,
+  `id_voyage_activity` int(11) NOT NULL,
+  `Activity` varchar(250) NOT NULL,
+  `StartDate` datetime NOT NULL,
+  `Duration` double(8,2) NOT NULL,
+  `Remarks` varchar(250) NOT NULL,
+  `JettyId` int(11) NOT NULL,
+  `PortCategory` set('PARK','START','END') NOT NULL,
+  `updated_date` datetime NOT NULL,
+  `updated_user` varchar(45) NOT NULL,
+  `ip_user_updated` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_timesheet`),
+  KEY `id_voyage_order` (`id_voyage_order`),
+  KEY `id_voyage_activity` (`id_voyage_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+UPDATE  `bussiness_type_order` SET  `bussiness_type_order` =  'BARGING-PORT TO PORT' WHERE  `bussiness_type_order`.`id_bussiness_type_order` =100;
+
+UPDATE  `bussiness_type_order` SET  `bussiness_type_order` =  'BARGING-TRANSHIPMENT' WHERE  `bussiness_type_order`.`id_bussiness_type_order` =200;

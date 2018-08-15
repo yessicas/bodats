@@ -1,0 +1,1 @@
+ALTER TABLE  `standard_fuel` CHANGE  `speed_standard`  `speed_standard` DOUBLE( 20, 2 ) NOT NULL; 

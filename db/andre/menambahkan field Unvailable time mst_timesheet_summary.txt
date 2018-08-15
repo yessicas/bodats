@@ -1,0 +1,1 @@
+INSERT INTO `fleetclone`.`mst_timesheet_summary` (`id_mst_timesheet_summary`, `timesheet_summary`, `is_active`) VALUES ('10', 'Unavailable Time', '1');

@@ -1,0 +1,72 @@
+.yiichat .exceded {
+	color: red;
+}
+
+.yiichat textarea {
+	font-size: 12px;
+	width:285px;
+	resize:none;
+	
+}
+
+.yiichat .posts {
+	/*border: 1px dotted #C9E0ED;*/
+	border: 1px solid #C9E0ED;
+	font-family:arial;
+	font-size: 12px;
+	border-radius:5px;
+	display: block;
+	margin-bottom: 10px;
+	padding: 3px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 300px;
+}
+
+.yiichat .posts .post {
+	display: block;
+	border-bottom: 1px dotted #C9E0ED;
+	margin-bottom: 4px;
+	padding: 4px;
+	overflow: auto;
+	text-align:right;
+}
+
+.yiichat .posts .yiichat-post-myown {
+	display: block;
+	border-bottom: 1px dotted #C9E0ED;
+	margin-bottom: 4px;
+	padding: 4px;
+	overflow: auto;
+	text-align:left;
+}
+
+.yiichat .posts .post .track {
+	background-color:  #F8F8F8;
+	border: 1px dotted #C9E0ED;
+	font-size: 10px;
+	padding: 3px;
+	color: #333;
+	float: right;
+	overflow: auto;
+	margin-left: 10px;
+	margin-right: 0px;
+	border-radius:5px;
+}
+
+.yiichat .posts .yiichat-post-myown .track{
+	background-color: #F8F8F8;
+	text-align:left;
+	float: left;
+	margin-right: 10px;
+	margin-left: 0px;
+	border-radius:5px;
+}
+
+.yiichat .posts .post .track .time {
+}
+.yiichat .posts .post .track .owner {
+color:#3b73af;
+}
+
+

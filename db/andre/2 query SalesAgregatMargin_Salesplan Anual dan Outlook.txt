@@ -1,0 +1,3 @@
+ALTER TABLE `sales_plan` ADD `SalesAgregatMargin` DOUBLE( 20, 2 ) NOT NULL AFTER `MarginOthersCostMoney` 
+
+ALTER TABLE `sales_plan_outlook` ADD `SalesAgregatMargin` DOUBLE( 20, 2 ) NOT NULL AFTER `MarginOthersCostMoney` 

@@ -1,0 +1,1 @@
+ALTER TABLE  `standard_vessel_brokerage` ADD  `id_standard_vessel_cost` BIGINT( 20 ) NOT NULL AFTER  `id_standard_vessel_brokerage`;

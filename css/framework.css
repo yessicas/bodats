@@ -1,0 +1,454 @@
+/* CSS Framework Document */
+body {
+  background: #dae0e6;
+  /*background: #e3e3ee;*/
+  font-family: "Myriad Pro", Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 20px;
+  color: #1b3a59;
+}
+a {
+  outline: none;
+  color: #003073;
+  text-decoration: none;
+}
+a:hover {
+  color: #39c;
+}
+
+.wrap {
+  display: block; position: relative;
+  /* width: 900px; */
+  /* margin: 0 auto;  */
+  margin: 200px;
+  padding: 0;
+  background: inherit;
+}
+.wrap:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.left { display: block; float: left; }
+.right { display: block; float: right; }
+
+/* Header */
+#headerpml {
+  display: block; position: relative;
+  width: 100%; height: 100px;
+  background: url(../images/layout/bg_headbars.png) top repeat-x;
+}
+  
+/* +-- Mainmenu */
+#mainmenu {
+  display: block; position: absolute; /*float: left;*/
+  width: 200px;
+  margin: 0 0 0 0px;
+
+  z-index: 100;
+  /*opacity: 0.9;*/
+}
+
+/* ++--- Logo */
+#mainmenu #logo {
+  display: block;
+  margin: 0;
+  padding: 10px 25px;
+
+}
+#mainmenu #logo a {
+  display: block;
+  width: 150px; height: 48px;
+  background: url(../images/layout/logotop.png) no-repeat;
+  background-position: 0 0;
+
+}
+
+/* +-- Navigation Bar */
+#navbar {
+  display: block; overflow: hidden;
+  position: absolute; z-index: 90;
+  width: 100%; height: 25px;
+  top: 35px; left: 0;
+  margin: 0 auto;
+  background: #555;
+}
+#navbar .wrap {
+  background: #555;
+}
+#navbar #username {
+  display: block; float: right;
+  margin: 0 15px 0 0;
+  color: #ccc;
+}
+
+/* ++---- Breadcrumbs */
+#breadcrumbs {
+  display: inline-block;
+  margin-left: 250px;
+  color: #ccc;
+}
+
+#breadcrumbs a {
+  display: inline-block;
+  margin: 0; padding: 0 0 5px;
+  line-height: 20px;
+  color: #ccc;
+}
+#breadcrumbs a:hover {
+  color: #fff;
+}
+
+/* ++---- Menu */
+#menu > ul > li a {
+  display: block;
+  margin: 0; padding: 0;
+  /*background: url(../images/layout/sprites.png) no-repeat;*/
+  /*background-position: 0 -115px;*/
+  font-family: "Myriad Pro", Arial, Helvetica, sans-serif;
+  line-height: 25px;
+  color: #ccc;
+}
+#menu > ul > li a:hover, #homemenu ul li a:hover {
+  /*background-position: -150px -115px;*/
+  color: #fff;
+}
+#menu > ul > li{
+  display: block;
+  margin: 0; padding: 0;
+  list-style-type: none;
+}
+
+/* +-- Calendar */
+#calendar {
+  display: inline-block;
+  margin-left: 250px;
+  font: 14px "Calibri", Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  line-height: 35px;
+  color: #91daf2;
+  cursor: default;
+}
+
+/* +-- Meta */
+#meta {
+  cursor: default;
+}
+#meta a {
+  display: block;
+  float: left; overflow: hidden;
+  height: 35px;
+  margin: 0 15px 0 0; padding: 0 0 0 20px;
+  background: url(../images/layout/sprites.png) no-repeat;
+  font: 14px "Calibri", Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  line-height: 35px;
+  color: #91daf2;
+}
+#meta a:hover { color: #e5f9ff; }
+#meta a.changepass { background-position: 0 -140px; }
+#meta a.logout { background-position: -150px -140px; }
+
+/* Content */
+#content {
+  display: block;
+  background: #fafcff url(../images/layout/bg2.gif) top;
+  margin-bottom:0px;
+  border-radius:6px;
+}
+#content .wrap {
+  padding: 30px 0 0;
+}
+#content #content-right {
+  display: block;
+  margin: 0 0 0 50px;
+}
+#content h2 {
+  display: block;
+  margin: 5px 0 5px; padding: 0px;
+  /*font-family: "Georgia", serif;*/
+  font-family: "Calibri", "Myriad Pro", Arial, Helvetica, sans-serif;
+  font-size: 1.7em;
+  font-weight: bold;
+  font-style: italic;
+  color: #1A354F;
+  text-shadow: 1px 2px 3px #ccc;
+  margin-top:-10px;
+}
+#content p {
+  display: block;
+}
+#content p > strong {
+  display: block;
+  font-style: italic;
+}
+#content img {
+  display: block; float: left;
+  margin: 0 15px 10px 0;
+  border: 0px solid #959da6;
+}
+#content .section {
+  width: 49%;
+  margin: 20px 0;
+}
+
+/* ++--- Sidemenu */
+#sidemenu {
+  display: block;
+  position: absolute; z-index: 70;
+  top: 160px; left: 0;
+}
+#sidemenu > ul {
+  display: block;
+  margin: 0; padding: 0;
+  list-style-type: none;
+}
+#sidemenu > ul > li {
+  display: block; overflow: hidden;
+  width: 40px;
+  margin: 0 0 5px;
+  background: #000;
+  opacity: 0.7;
+}
+#sidemenu > ul > li.active {
+  border-top: 1px solid #555;
+  border-bottom: 1px solid #555;
+  border-right: 1px solid #555;
+  background: #000 url(../images/layout/bg_sidemenu.png) top repeat-x;
+  opacity: 1;
+}
+#sidemenu > ul > li a {
+  display: block;
+  height: 40px;
+  padding: 0 0 0 50px;
+  background: url(../images/icon/icongroups.png) no-repeat;
+  font-size: 1.1em;
+  line-height: 40px;
+  color: #ccc;
+  
+}
+#sidemenu > ul > li a:hover {
+  color: #fff;
+}
+#sidemenu > ul > li > ul {
+  display: none;
+  padding: 0 0 10px 50px;
+  list-style-type: none;
+}
+#sidemenu > ul > li > ul > li a {
+  height: 30px;
+  margin: 0; padding: 0 10px 0 20px;
+  background: url(../images/layout/sprites.png) no-repeat;
+  background-position: 0px -115px;
+  line-height: 30px;
+  font-size: 1em;
+}
+#sidemenu > ul > li > ul > li a:hover {
+  background-position: -150px -115px;
+}
+
+#sidemenu ul li a.quotation {
+  background-position: 0 0;
+}
+#sidemenu ul li a.invoice {
+  background-position: 0 -80px;
+}
+#sidemenu ul li a.activityrep {
+  background-position: 0 -160px;
+}
+#sidemenu ul li a.notif {
+  background-position: 0 -240px;
+}
+#sidemenu ul li a.customer {
+  background-position: 0 -320px;
+}
+#sidemenu ul li a.customerissue {
+  background-position: 0 -360px;
+}
+
+#sidemenu ul li a.user {
+  background-position: 0 -400px;
+}
+#sidemenu ul li a.home {
+  background-position: 0 -440px;
+}
+#sidemenu ul li a.voyageicon {
+  background-position: 0 -480px;
+}
+#sidemenu ul li a.schedule {
+  background-position: 0 -520px;
+}
+#sidemenu ul li a.route {
+  background-position: 0 -560px;
+}
+#sidemenu ul li a.storage {
+  background-position: 0 -600px;
+}
+#sidemenu ul li a.access {
+  background-position: 0 -640px;
+}
+#sidemenu ul li a.verify {
+  background-position: 0 -680px;
+}
+#sidemenu ul li a.timesheet {
+  background-position: 0 -720px;
+}
+#sidemenu ul li a.purchase {
+  background-position: 0 -760px;
+}
+#sidemenu ul li a.budgeting {
+  background-position: 0 -800px;
+}
+#sidemenu ul li a.report {
+  background-position: 0 -840px;
+}
+#sidemenu ul li a.inventory_box {
+  background-position: 0 -880px;
+}
+#sidemenu ul li a.repairtool {
+  background-position: 0 -920px;
+}
+#sidemenu ul li a.inspect {
+  background-position: 0 -960px;
+}
+#sidemenu ul li a.vesselmenu {
+  background-position: 0 -1000px;
+}
+#sidemenu ul li a.maintenancetool {
+  background-position: 0 -1040px;
+}
+#sidemenu ul li a.treeitem {
+  background-position: 0 -1080px;
+}
+#sidemenu ul li a.gissue {
+  background-position: 0 -1120px;
+}
+#sidemenu ul li a.greceive {
+  background-position: 0 -1160px;
+}
+
+#sidemenu > ul > li.active > a {
+  color: #000;
+}
+#sidemenu ul li.active a.quotation {
+  background-position: 0 -40px;
+}
+#sidemenu ul li.active a.shipping_order {
+  background-position: 0 -120px;
+}
+#sidemenu ul li.active a.timesheet {
+  background-position: 0 -200px;
+}
+#sidemenu ul li.active a.invoice {
+  background-position: 0 -280px;
+}
+#sidemenu ul li.active a.customer {
+  background-position: 0 -360px;
+}
+
+
+/* +-- Tabs */
+.tabs {
+  display: block;
+  margin: 0 0 15px;
+}
+.tabs:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.tabs ul.tab-head {
+  display: block;
+  margin: 0; padding: 0 16px;
+  list-style-type: none;
+  text-align: right;
+  cursor: default;
+}
+.tabs ul.tab-head li {
+  display: inline-block;
+}
+.tabs ul.tab-head li a {
+  display: block;
+  margin: 0 3px 0 0;
+  padding: 0 0 0 13px;
+  line-height: 30px;
+  font-size: 1.1em;
+}
+.tabs ul.tab-head li.active a {
+  background: url(../images/layout/sprites.png) no-repeat;
+  background-position: 0 -50px;
+  color: #003073;
+  cursor: default;
+}
+.tabs ul.tab-head li.active a span {
+  display: block; float: right;
+  width: 13px; height: 30px;
+  margin: 0 -13px 0 0;
+  background: inherit;
+  background-position: -287px -50px;
+}
+.tabs .tab-content {
+  padding: 10px;
+  background: #dae0e6;
+}
+.tab-content {
+  padding: 5px;
+  color: #1b3a59 !important;
+}
+
+/* Footer */
+#footerpml {
+  display: block;
+  font-size: 0.9em;
+  color: #959da6;
+  background-color : #d7d7d7;
+  margin-bottom: 0;
+}
+#footerpml #logo {
+  display: inline-block;
+  width: 154px; height: 46px;
+  margin: 20px 0 0;
+  background: url(../images/layout/logobottom.png) no-repeat;
+
+  opacity: 0.8;
+}
+
+#footerpml #logo2 {
+  display: inline-block;
+  width: 120px; 
+  height: 90px;
+  margin: 25px -1px 0px 0px;
+  background: url(../images/layout/bar.png) no-repeat;
+  float:right;
+  opacity: 0.8;
+}
+
+#footerpml #links {
+  margin: 45px 0 0;
+  cursor: default;
+}
+#footerpml #links a {
+  display: inline-block;
+  padding: 0 5px;
+  line-height: 20px;
+  color: #959da6;
+}
+#footerpml #links a:hover {
+  color: #475059;
+}
+#footerpml p {
+  display: block;
+  margin: 0;
+  border-top: 1px solid #959da6;
+  text-align: right;
+}
+
+#footerpml-wrap {
+  padding-left: 150px;
+  padding-right: 200px;
+}

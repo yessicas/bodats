@@ -1,0 +1,291 @@
+@charset "utf-8";
+/* CSS Document */  
+
+form {
+  margin: 0;
+	font: 13px "Myriad Pro", Arial, Helvetica, sans-serif;
+}
+fieldset {
+  display: block; position: relative;
+  margin: 10px 0 30px;
+  padding: 0 20px;
+  background: #fafafa;
+  clear: both;
+}
+fieldset legend {
+  display: block; position: absolute;
+  top: -10px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background: #eee;
+  /*background: transparent;*/
+  font-weight: bold;
+}
+
+.buttonbar {
+  display: block; float: right;
+  position: relative;
+  height: 30px;
+  margin: -30px 10px 10px 0;
+  padding: 0 0 0 8px;
+  background: #fafafa url(../images/layout/bg_buttonbar.png) no-repeat;
+  background-position: 0;
+}
+.buttonbar span {
+  display: block; float: right;
+  position: absolute;
+  width: 20px; height: 30px;
+  right: -6px;
+  z-index: 80px;
+  background: inherit;
+  background-position: -780px 0;
+}
+.buttonbar a {
+  display: block; float: left;
+  position: relative;
+  margin: 0 3px 0 0; padding: 0 5px;
+  z-index: 90;
+  background: #bfbfbf;
+  line-height: 27px;
+  font-size: 1.1em;
+  color: #fff;
+}
+.buttonbar a:hover {
+  background: #99b2bf;
+  color: #fff;
+}
+
+/*----Input Row----*/
+.row {
+  display: block;
+  float: none;
+}
+.row label {
+  display: inline-block;
+  width: 150px;
+  padding: 2px 0 0;
+  font-weight: normal;
+  vertical-align: top;
+}
+.row label span {
+  display: block;
+  float: right;
+  margin-right: 5px;
+}
+.row .rowwrap {
+  float: none;
+  display: inline-block;
+}
+.row .rowwrap p {
+}
+
+/*----Input Objects----*/
+input, select, textarea {
+  margin: 0 0 3px; padding: 2px;
+	outline: none;
+  border: 1px solid #ccc;
+  font: inherit;
+}
+input {
+  /*width: 150px;*/
+}
+select {
+	width: 150px;
+}
+textarea {
+  line-height: 20px;
+}
+input:focus, textarea:focus, select:focus {
+	border: 1px solid #09f !important;
+}
+textarea {
+  /*min-width: 200px; max-width: 200px;*/
+  height: 60px;
+}
+
+/*---Icon---*/
+div[dir=ltr][role=dialog] {
+	width:500px !important;
+}
+
+input.ui-add {
+	margin: 0 0 0 10px;
+	width: 32px;
+	background-color:#A8D2E0;
+	color: #339900;
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input.ui-del {
+	width: 32px;
+	font-size:200%;
+	background-color:#A8D2E0;
+	color: #FF0000;
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.table_grid tbody tr td[role=gridcell] a {
+	padding: 0 10px 1px 10px;
+	cursor: pointer;
+}
+
+.table_grid tbody tr td[role=gridcell] a.detail {
+background: url(../images/icon/tableicon.png) no-repeat;
+	background-position: 0 0;
+}
+
+.table_grid tbody tr td[role=gridcell] a.confirm {
+	background: url(../images/icon/tableicon.png) no-repeat;
+	background-position: 0 -20px;
+}
+
+.table_grid tbody tr td[role=gridcell] a.trash {
+background: url(../images/icon/tableicon.png) no-repeat;
+	background-position: 0 -40px;
+}
+
+.table_grid tbody tr td[role=gridcell] a.edit {
+background: url(../images/icon/tableicon.png) no-repeat;
+	background-position: 0 -60px;
+}
+
+.table_grid tbody tr td[role=gridcell] a.pdf {
+	background: url(../images/icon/tableicon.png) no-repeat;
+	background-position: 0 -80px;
+}
+
+.table_grid tbody tr td[role=gridcell] a.download {
+background: url(../images/icon/tableicon.png) no-repeat;
+	background-position: 0 -100px;
+}
+
+.table_grid tbody tr td[role=gridcell] a.delete {
+background: url(../images/icon/tableicon.png) no-repeat;
+	background-position: 0 -120px;
+}
+
+span.search {
+	padding: 7px 22px 0 0;
+	background: url(../images/icon/search_button.png) no-repeat;
+	cursor: pointer;
+}
+
+span.search:hover {
+	background: url(../images/icon/search_button_hover.png) no-repeat;
+}
+
+a.download {
+	width: 24px;
+	height: 24px;
+	padding: 0 0 8px 24px;
+	background: url(../images/icon/download_icon.png) no-repeat;
+	cursor: pointer;
+}
+
+/*---Div Loading---*/
+div.ajax_loading {
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+	display:none;
+}
+
+div.ajax_loading div.image{
+	width:32px;
+	height:32px;
+	margin-left:auto;
+	margin-right:auto;
+	background: url(../images/icon/loading.gif) no-repeat;
+}
+
+/*---Class Text Color---*/
+.greentext{ color:#339900 }
+.redtext{ color:#ff0000 }
+
+/*---Div Error---*/
+/*div.error {
+	background-color:#fef1ec;
+	text-align:center;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+div.error p {
+	margin:2px 0 2px 0;
+	font:Arial, Helvetica, sans-serif;
+	font-size:10pt;
+	color:#cd0a0a;
+}
+*/
+.table_grid tbody tr td a.timesheet {
+	padding:0 4px 1px 10px;
+	background: url(../images/icon/timesheet.gif) no-repeat;
+}
+
+.table_grid tbody tr td a.worksheet {
+	padding:0 4px 1px 10px;
+	background: url(../images/icon/worksheet.gif) no-repeat;
+}
+
+.table_grid tbody tr td a.win {
+	padding:0 4px 1px 10px;
+	background: url(../images/icon/thumbsup.gif) no-repeat;
+}
+
+.table_grid tbody tr td a.lose {
+	padding:0 4px 1px 10px;
+	background: url(../images/icon/thumbsdown.gif) no-repeat;
+}
+
+.table_grid tbody tr td a.revision {
+	padding:0 4px 1px 10px;
+	background: url(../images/icon/pencil.gif) no-repeat;
+}
+
+.table_grid tbody tr td a.blue {
+	padding:0px 10px 1px 15px;
+	background: url(../images/icon/blue.png) no-repeat;
+	cursor:default;
+}
+
+.table_grid tbody tr td a.green {
+	padding:0px 10px 1px 15px;
+	background: url(../images/icon/green.png) no-repeat;
+	cursor:default;
+}
+
+.table_grid tbody tr td a.yellow {
+	padding:0px 10px 1px 15px;
+	background: url(../images/icon/yellow.png) no-repeat;
+	cursor:default;
+}
+
+.table_grid tbody tr td a.red {
+	padding:0px 10px 1px 15px;
+	background: url(../images/icon/red.png) no-repeat;
+	cursor:default;
+}
+
+.table_grid tbody tr td a.upload {
+	padding:0 4px 1px 10px;
+	background: url(../images/icon/file_upload.jpg) no-repeat;
+}
+
+a.download_small {
+	padding: 0 0 8px 18px;
+	background: url(../images/icon/download_small.png) no-repeat;
+	cursor: pointer;
+}
+
+span.calendar {
+	padding: 7px 22px 0 0;
+	background: url(../images/icon/calendar.jpg) no-repeat;
+	cursor: pointer;
+}

@@ -1,0 +1,194 @@
+h5 {
+font-size: 1em;
+font-weight: bold;
+margin-bottom: 0em;
+}
+table
+{ 
+margin: 0 0 0 0;
+border-radius:5px;
+border-top:  1px solid #111111;
+border-bottom: 1px solid #111111;
+border-left: 1px solid #111111;
+border-right: 1px solid #111111;}
+
+.tabel_border_o
+{ 
+margin: 0 0 0 0;
+border-radius:3px;
+border-top: 0px ;
+border-bottom: 0px ;
+border-left: 0px ;
+border-right: 0px ;}
+
+/*Detailview*/
+
+.detail-view
+{
+	border-top: 1px solid #C1DAD7;
+	width: 100%;
+}
+
+.detail-view .even th,
+.detail-view .odd th{
+	font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #111111;
+	padding: 6px 12px 6px 12px;
+	border: 1px solid #C1DAD7;
+	background-color: #EDF3F3;
+	width: 25%;
+	text-align: left !important;
+}
+
+.detail-view .title th {
+	background-color: #EDF3F3;
+	border-left: 1px solid #C1DAD7;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #C1DAD7;
+	border-right: 1px solid #C1DAD7;
+}
+
+.detail-view tr.odd td{
+	background-color: #F5FBFB !important;
+}
+
+.even td, .odd td{
+	font: normal 10px "calibri";
+	padding: 5px 5px 5px 5px;
+	/*color: #4F6B72;*/
+	/*border: 1px solid #B4B4B4  !important;*/
+	border: 1px solid black  !important;
+	color: black;
+}
+
+.grid-view
+{
+	padding: 15px 0;
+}
+
+.grid-view table.items
+{
+	background: white;
+	border-collapse: collapse;
+	width: 100%;
+	border: 1px #D0E3EF solid;
+}
+
+.grid-view table.items th, .grid-view table.items td
+{
+	font-size: 0.9em;
+	border: 1px #B4B4B4 solid;
+	padding: 0.3em;
+}
+
+.grid-view table.items th
+{
+	cursor: pointer;
+	background: #ffffff !important;
+	border: 1px solid #B4B4B4  !important;
+	padding: 6px;
+}
+
+.grid-view table.items th.blue
+{
+	cursor: pointer;
+	background: #ECECEC  !important;
+	border: 1px solid #B4B4B4  !important;
+	padding: 6px;
+}
+
+.grid-view table.items th a
+{
+	color: #614F4F !important;
+    font: 12px "arial",Verdana,Arial,Helvetica,sans-serif;    
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.grid-view table.items th a:hover
+{
+	color: #FFF;
+}
+
+.grid-view table.items th a.asc
+{
+	background:url(up.gif) right center no-repeat;
+	padding-right: 10px;
+}
+
+.grid-view table.items th a.desc
+{
+	background:url(down.gif) right center no-repeat;
+	padding-right: 10px;
+}
+
+.grid-view table.items tr.even
+{
+	background: #ffffff;
+}
+
+.grid-view table.items tr.odd
+{
+	background: #F8F8F8;
+}
+
+.grid-view table.items tr.selected
+{
+	background: #A0CCF8;
+}
+
+.grid-view table.items tr:hover.selected
+{
+	background: #A0CCF8;
+}
+
+.grid-view table.items tbody tr:hover
+{
+	background: #ffffff;
+}
+
+.grid-view .link-column img
+{
+	border: 0;
+}
+
+.grid-view .button-column
+{
+	text-align: center;
+	width: 60px;
+}
+
+.grid-view .button-column img
+{
+	border: 0;
+}
+
+.grid-view .checkbox-column
+{
+	width: 15px;
+}
+
+.grid-view .summary
+{
+	margin: 0 0 0 0;
+	text-align: right;
+}
+
+.grid-view .pager
+{
+	margin: 5px 0 0 0;
+	text-align: right;
+}
+
+.grid-view .empty
+{
+	font-style: italic;
+}
+
+.grid-view .filters input,
+.grid-view .filters select
+{
+	width: 100%;
+	border: 1px solid #ccc;
+}

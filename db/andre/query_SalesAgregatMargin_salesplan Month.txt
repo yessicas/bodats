@@ -1,0 +1,1 @@
+ALTER TABLE `sales_plan_month` ADD `SalesAgregatMargin` DOUBLE( 20, 2 ) NOT NULL AFTER `MarginOthersCostMoney` 

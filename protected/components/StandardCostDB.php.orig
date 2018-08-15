@@ -1,0 +1,578 @@
+<?php
+class StandardCostDB {	
+	public static function getStandardCost($id_vessel_tug, $id_vessel_barge, $id_start, $id_end, $fuelprice = 1, $TOTAL_DAYS=30){
+		$RESULT = array();
+		//Get Value
+		$LoadJetty = JettyDB::getJetty($id_start);
+		$UnLoadJetty = JettyDB::getJetty($id_end);
+		$TugVessel = VesselDB::getVessel($id_vessel_tug);
+		$BargeVessel = VesselDB::getVessel($id_vessel_barge);
+		$route = $LoadJetty->JettyName."-".$UnLoadJetty->JettyName;
+		
+		//Standard Fueld & Cycle Time
+		$FUEL_STD = StandardFuelDB::getStandardFuel($id_vessel_tug, $id_vessel_barge, $id_start, $id_end);
+		//$FUEL_STD = StandardFuelDB::getSpStandardFuel($id_vessel_tug, $id_vessel_barge, $id_start, $id_end);
+		$CYCLE_TIME = 0;
+		//$TOTAL_DAYS = StandardCostDB::getTotalDay();
+		if($FUEL_STD->cycle_time > 0){
+			$CYCLE_TIME = $FUEL_STD->cycle_time;
+		}
+		/*
+		if($FUEL_STD->fuel > 0){
+			$res = new StandardCostResult();
+			$res->value = $FUEL_STD->fuel;
+			$RESULT['fuel'] = $res;
+		}else{
+			$res = new StandardCostResult();
+			$res->notes = "Standard Fuel for ".$route." is 0.<br>Click for add/modify standard fuel";
+			$res->url = Yii::app()->createUrl("standardfuel/admin");
+			$RESULT['fuel'] = $res;
+		}
+		
+		//CYCLE TIME --> Ini Parameter Penting karena digunakan sebagai pembagi hari
+		$CYCLE_TIME = 0;
+		$TOTAL_DAYS = 30;
+		if($FUEL_STD->cycle_time > 0){
+			$cy_time = new StandardCostResult();
+			$cy_time->value = $FUEL_STD->cycle_time;
+			$CYCLE_TIME = $FUEL_STD->cycle_time;
+			$RESULT['cycle_time'] = $cy_time;
+		}else{
+			$cy_time = new StandardCostResult();
+			$cy_time->notes = "Standard Cycle Time for ".$route." is 0.<br>Click for add/modify standard fuel";
+			$cy_time->url = Yii::app()->createUrl("standardfuel/admin");
+			$RESULT['cycle_time'] = $cy_time;
+		}
+		*/
+		
+		//Fuel Cost
+		if($FUEL_STD->fuel > 0){
+			$fuelcost = new StandardCostResult();
+			$fuelcost->value = $FUEL_STD->fuel*$fuelprice;
+			$RESULT['fuelcost'] = $fuelcost;
+		}else{
+			$fuelcost = new StandardCostResult();
+			$fuelcost->notes = "Standard Fuel for ".$route." is 0.<br>Click for add/modify standard fuel";
+			$fuelcost->url = Yii::app()->createUrl("standardfuel/admin");
+			$RESULT['fuelcost'] = $fuelcost;
+		}
+		
+		//Standard Agency
+		$AGENCY_STD = StandardAgencyDB::getStandardAgency($id_vessel_tug, $id_vessel_barge, $id_start, $id_end);
+		//$AGENCY_STD = StandardAgencyDB::getSpStandardAgency($id_vessel_tug, $id_vessel_barge, $id_start, $id_end);
+		$agencyRes = new StandardCostResult();
+		$agency_fix_cost = 0;
+		$agency_var_cost = 0;
+		if($AGENCY_STD->fix_cost > 0){
+			$agency_fix_cost = $AGENCY_STD->fix_cost;
+			$agency_var_cost = $AGENCY_STD->var_cost;
+		}else{
+			$agencyRes->notes = "Standard Agency for ".$route." is 0.<br>Click for add/modify standard agency";
+			$agencyRes->url = Yii::app()->createUrl("standardagency/admin");			
+		}
+		
+		$agencyRes->value = $agency_fix_cost+$agency_var_cost;
+		$RESULT['agency_cost'] = $agencyRes;
+		
+		//Standard Vessel Cost
+		//3.1 Depreciation Cost
+		$TugCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		//$TugCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		$depreciation = 0;
+		$depRes = new StandardCostResult();
+		if(isset($TugCost)){
+			$depreciation = $TugCost->depreciation_cost;
+			if($TugCost->depreciation_cost <= 0){
+				$depRes->notes = "Tug Depreciation (".$TugVessel->VesselName.") is 0.";
+				$depRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$depRes->notes = "Tug Depreciation (".$TugVessel->VesselName.") is not set.";
+			$depRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		//echo "Tug".$depreciation;
+		
+		$BargeCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		//$BargeCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		if(isset($BargeCost)){
+			//echo "Barge".$BargeCost->depreciation_cost;
+			$depreciation = $depreciation + $BargeCost->depreciation_cost;
+			if($BargeCost->depreciation_cost <= 0){
+				$depRes->notes = $depRes->notes."Barge Depreciation (".$BargeVessel->VesselName.") is 0. <br>Click for add/modify standard depreciation";
+				$depRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$BargeCost->id_vessel));
+			}
+		}else{
+			$depRes->notes = $depRes->notes."Barge Depreciation (".$BargeVessel->VesselName.") is not set.<br>Click for add/modify standard depreciation";
+		}
+		
+		//echo $depreciation."<---total depresiasi";
+		if($CYCLE_TIME > 0){
+			$unit_depreciation = $depreciation/$TOTAL_DAYS;
+			$depreciation_current = $CYCLE_TIME * $unit_depreciation;
+			$depRes->value = $depreciation_current;
+			//echo $depreciation_current."<---depresiasi";
+		}else{
+			//$depRes->value = $depreciation;
+			$depRes->value = 0;
+		}
+		$RESULT['depreciation_cost'] = $depRes;
+		
+		
+
+		//3.2 Rent Cost
+		$rentcost = 0;
+		$depRes = new StandardCostResult();
+		if(isset($TugCost)){
+			$rentcost = $TugCost->rent_cost;
+			if($TugCost->rent_cost <= 0){
+				$depRes->notes = "Tug Rent Cost (".$TugVessel->VesselName.") is 0.";
+				$depRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$depRes->notes = "Tug Rent Cost (".$TugVessel->VesselName.") is not set.";
+			$depRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		if(isset($BargeCost)){
+			$rentcost = $rentcost + $BargeCost->rent_cost;
+			if($BargeCost->rent_cost <= 0){
+				//$depRes->notes = $depRes->notes."Barge Rent Cost (".$BargeVessel->VesselName.") is 0. <br>Click for add/modify standard fuel";
+				//$depRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$BargeCost->id_vessel));
+			}
+		}else{
+			$depRes->notes = $depRes->notes."Barge Rent Cost (".$BargeVessel->VesselName.") is not set.<br>Click for add/modify standard rent cost";
+		}
+		
+		if($CYCLE_TIME > 0){
+			$unit_rentcost = $rentcost/$TOTAL_DAYS;
+			$rentcost_current = $CYCLE_TIME * $unit_rentcost;
+			$depRes->value = $rentcost_current;
+		}else{
+			$depRes->value = 0;
+		}
+		$RESULT['rent_cost'] = $depRes;
+		
+		
+		
+		//3. Crew own - Cost
+		$crewRes = new StandardCostResult();
+		$crew_own_cost = 0;
+		if(isset($TugCost)){
+			$crewRes->value = $TugCost->crew_own_cost;
+			$crew_own_cost = $TugCost->crew_own_cost;
+			if($crewRes->value <= 0){
+				$crewRes->notes = "Crew Own Cost (".$TugVessel->VesselName.") is 0.<br>Click for add/modify standard crew own cost";
+				$crewRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$crewRes->notes = "Crew Own Cost (".$TugVessel->VesselName.") is not set.<br>Click for add/modify standard crew own cost";
+			$crewRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		if($CYCLE_TIME > 0){
+			$cr_own = $crew_own_cost/$TOTAL_DAYS;
+			$crewown_current = $CYCLE_TIME * $cr_own;
+			$crewRes->value = $crewown_current;
+		}else{
+			//$depRes->value = $depreciation;
+			$crewRes->value = 0;
+		}
+		$RESULT['crew_own_cost'] = $crewRes;
+		
+		
+		
+		
+		
+		//4. Crew Sub Cont - Cost
+		$crewSubRes = new StandardCostResult();
+		$crew_subcont_cost = 0;
+		if(isset($TugCost)){
+			$crewSubRes->value = $TugCost->crew_subcont_cost;
+			$crew_subcont_cost = $TugCost->crew_subcont_cost;
+			if($crewSubRes->value <= 0){
+				$crewSubRes->notes = "Crew Sub Cont Cost (".$TugVessel->VesselName.") is 0.<br>Click for add/modify standard crew sub cont cost";
+				$crewSubRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$crewSubRes->notes = "Crew Sub Cont Cost (".$TugVessel->VesselName.") is not set.<br>Click for add/modify standard crew sub cont cost";
+			$crewSubRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		if($CYCLE_TIME > 0){
+			//$cr_subcont = $TugCost->crew_subcont_cost/$TOTAL_DAYS;
+			$cr_subcont = $crew_subcont_cost/$TOTAL_DAYS;
+			$cr_subcont_current = $CYCLE_TIME * $cr_subcont;
+			$crewSubRes->value = $cr_subcont_current;
+		}else{
+			//$depRes->value = $depreciation;
+			$crewSubRes->value = 0;
+		}
+		$RESULT['crew_subcont_cost'] = $crewSubRes;
+		
+		
+		
+		
+		
+		//5. Insurance - Cost
+		$insuranceRes = new StandardCostResult();
+		$total_insurance = 0;
+		if(isset($TugCost)){
+			//$insuranceRes->value = $TugCost->insurance;
+			$total_insurance = $TugCost->insurance;
+			if($TugCost->insurance <= 0){
+				$insuranceRes->notes = "Insurance Tug Cost (".$TugVessel->VesselName.") is 0.";
+				$insuranceRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$insuranceRes->notes = "Insurance Tug Cost (".$TugVessel->VesselName.") is not set.";
+			$insuranceRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		if(isset($BargeCost)){
+			//$insuranceRes->value = $insuranceRes->value+ $BargeCost->insurance;
+			$total_insurance = $total_insurance + $BargeCost->insurance;
+			if($BargeCost->insurance <= 0){
+				$insuranceRes->notes .= "Insurance Barge Cost (".$BargeVessel->VesselName.") is 0.<br>Click for add/modify standard insurance";
+				$insuranceRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$BargeCost->id_vessel));
+			}
+		}else{
+			$insuranceRes->notes .= "Insurance Barge Cost (".$BargeVessel->VesselName.") is not set.<br>Click for add/modify standard insurance";
+			$insuranceRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		if($CYCLE_TIME > 0){
+			$unit_insurance = $total_insurance/$TOTAL_DAYS;
+			$insurance_current = $CYCLE_TIME * $unit_insurance;
+			$insuranceRes->value = $insurance_current; //$TugCost->insurance;
+		}else{
+			$insuranceRes->value = 0;
+		}
+		$RESULT['insurance_cost'] = $insuranceRes;
+		
+		
+		//6. Repair - Cost
+		$repairRes = new StandardCostResult();
+		$repairtotal = 0;
+		if(isset($TugCost)){
+			//$repairRes->value = $TugCost->repair;
+			$repairtotal = $TugCost->repair;
+			if($TugCost->repair <= 0){
+				$repairRes->notes = "Repair Tug Cost (".$TugVessel->VesselName.") is 0.";
+				$repairRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$repairRes->notes = "Repair Tug Cost (".$TugVessel->VesselName.") is not set.";
+			$repairRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		if(isset($BargeCost)){
+			//$repairRes->value = $repairRes->value+ $BargeCost->repair;
+			$repairtotal = $repairtotal + $BargeCost->repair;
+			if($BargeCost->repair <= 0){
+				$repairRes->notes .= "Repair Barge Cost (".$BargeVessel->VesselName.") is 0.<br>Click for add/modify standard repair";
+				$repairRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$BargeCost->id_vessel));
+			}
+		}else{
+			$repairRes->notes .= "Repair Barge Cost (".$BargeVessel->VesselName.") is not set.<br>Click for add/modify standard repair";
+			$repairRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		//HItung total repair
+		if($CYCLE_TIME > 0){
+			$unit_repair = $repairtotal/$TOTAL_DAYS;
+			$rep = $CYCLE_TIME * $unit_repair;
+			$repairRes->value = $rep; 
+		}else{
+			$repairRes->value = 0;
+		}
+		
+		$RESULT['repair_cost'] = $repairRes;
+		
+		
+		
+		
+		//7. Docking - Cost
+		$dockingtotal = 0;
+		$dockingRes = new StandardCostResult();
+		if(isset($TugCost)){
+			//$dockingRes->value = $TugCost->docking;
+			$dockingtotal = $TugCost->docking;
+			if($TugCost->docking <= 0){
+				$dockingRes->notes = "Docking Tug Cost (".$TugVessel->VesselName.") is 0.";
+				$dockingRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$dockingRes->notes = "Docking Tug Cost (".$TugVessel->VesselName.") is not set.";
+			$dockingRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		if(isset($BargeCost)){
+			//$dockingRes->value = $dockingRes->value+ $BargeCost->docking;
+			$dockingtotal = $dockingtotal + $BargeCost->docking;
+			if($BargeCost->docking <= 0){
+				$dockingRes->notes .= "Docking Barge Cost (".$BargeVessel->VesselName.") is 0.<br>Click for add/modify standard docking";
+				$dockingRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$BargeCost->id_vessel));
+			}
+		}else{
+			$dockingRes->notes .= "Docking Barge Cost (".$BargeVessel->VesselName.") is not set.<br>Click for add/modify standard docking";
+			$dockingRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		//HItung total docking
+		if($CYCLE_TIME > 0){
+			$unit_docking= $dockingtotal/$TOTAL_DAYS;
+			$dockingtot = $CYCLE_TIME * $unit_docking;
+			$dockingRes->value = $dockingtot; //$TugCost->insurance;
+			//$insuranceRes->value = $TugCost->insurance;
+		}else{
+			$dockingRes->value = 0;
+		}
+		$RESULT['docking_cost'] = $dockingRes;
+		
+		
+		
+		//8. Brokerage - Cost
+		$brokarage_total = 0;
+		$brokerageRes = new StandardCostResult();
+		if(isset($TugCost)){
+			//$brokerageRes->value = $TugCost->brokerage_fee;
+			$brokarage_total = $TugCost->brokerage_fee;
+			if($TugCost->brokerage_fee <= 0){
+				$brokerageRes->notes = "Brokerage Tug Cost (".$TugVessel->VesselName.") is 0.<br>Click for add/modify standard brokerage";
+				$brokerageRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$brokerageRes->notes = "Brokerage Tug Cost (".$TugVessel->VesselName.") is not set.<br>Click for add/modify standard brokerage";
+			$brokerageRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		if(isset($BargeCost)){
+			//$brokerageRes->value = $brokerageRes->value+ $BargeCost->brokerage_fee;
+			if(isset($TugCost)){
+				$brokarage_total = $brokarage_total + $TugCost->brokerage_fee;
+			}
+			if($BargeCost->brokerage_fee <= 0){
+				//$brokerageRes->notes .= "Brokerage Barge Cost (".$BargeVessel->VesselName.") is 0.";
+			}
+		}else{
+			//$brokerageRes->notes .= "Brokerage Barge Cost (".$BargeVessel->VesselName.") is not set.";
+		}
+		
+		//HItung Brokearage Repair
+		if($CYCLE_TIME > 0){
+			$unit_brokerage= $brokarage_total/$TOTAL_DAYS;
+			$brokeragetot = $CYCLE_TIME * $unit_brokerage;
+			$brokerageRes->value = $brokeragetot; //$TugCost->insurance;
+		}else{
+			$brokerageRes->value = 0;
+		}
+		$RESULT['brokerage_cost'] = $brokerageRes;
+		
+		
+		//9. Other - Cost
+		$otherRes = new StandardCostResult();
+		$total_other_cost = 0;
+		if(isset($TugCost)){
+			//$otherRes->value = $TugCost->others;
+			$total_other_cost = $TugCost->others;
+			if($otherRes->value <= 0){
+				$otherRes->notes = "Others Tug Cost (".$TugVessel->VesselName.") is 0.<br>Click for add/modify standard others";
+				$otherRes->url = Yii::app()->createUrl("standardvesselcost/admin", array('id_vessel'=>$TugVessel->id_vessel));
+			}
+		}else{
+			$otherRes->notes = "Others Tug Cost (".$TugVessel->VesselName.") is not set.<br>Click for add/modify standard others";
+			$otherRes->url = Yii::app()->createUrl("standardvesselcost/admin"); 
+		}
+		
+		if(isset($BargeCost)){
+			//$otherRes->value = $otherRes->value+ $BargeCost->others;
+			$total_other_cost = $total_other_cost + $BargeCost->others;
+			if($BargeCost->others <= 0){
+				//$otherRes->notes .= "Others Barge Cost (".$BargeVessel->VesselName.") is 0.";
+			}
+		}else{
+			//$otherRes->notes .= "Others Barge Cost (".$BargeVessel->VesselName.") is not set.";
+		}
+		
+		if($CYCLE_TIME > 0){
+			$unit_others= $total_other_cost/$TOTAL_DAYS;
+			$brokeragetot = $CYCLE_TIME * $unit_others;
+			$otherRes->value = $brokeragetot;
+		}else{
+			$otherRes->value = 0;
+		}
+		$RESULT['other_cost'] = $otherRes;
+		
+		
+		//TOTAL COST
+		$TOTAL_COST = 0;
+		$totalCostRest = new StandardCostResult();
+		foreach($RESULT as $res){
+			$TOTAL_COST = $TOTAL_COST + $res->value;
+			//echo $res->value."<br>";
+		}
+		//exit();
+		$totalCostRest->value= $TOTAL_COST ;
+		$RESULT['TOTAL_COST'] = $totalCostRest;
+		
+		
+		
+		
+		//Diletakkan di bawaha agar tidak terhitung total
+		if($FUEL_STD->fuel > 0){
+			$res = new StandardCostResult();
+			$res->value = $FUEL_STD->fuel;
+			$RESULT['fuel'] = $res;
+		}else{
+			$res = new StandardCostResult();
+			$res->notes = "Standard Fuel for ".$route." is 0.<br>Click for add/modify standard fuel";
+			$res->url = Yii::app()->createUrl("standardfuel/admin");
+			$RESULT['fuel'] = $res;
+		}
+		
+		//CYCLE TIME --> Ini Parameter Penting karena digunakan sebagai pembagi hari
+		if($FUEL_STD->cycle_time > 0){
+			$cy_time = new StandardCostResult();
+			$cy_time->value = $FUEL_STD->cycle_time;
+			$CYCLE_TIME = $FUEL_STD->cycle_time;
+			$RESULT['cycle_time'] = $cy_time;
+		}else{
+			$cy_time = new StandardCostResult();
+			$cy_time->notes = "Standard Cycle Time for ".$route." is 0.<br>Click for add/modify standard fuel";
+			$cy_time->url = Yii::app()->createUrl("standardfuel/admin");
+			$RESULT['cycle_time'] = $cy_time;
+		}
+		
+		return $RESULT;
+	}	 
+	
+	public static function getTotalDay(){
+		return 30;
+	}
+	
+	public static function getDepreciationCost($id_vessel_tug, $id_vessel_barge){
+		//3.1 Depreciation Cost
+		$TugCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		$BargeCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		//$TugCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		//$BargeCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		
+		$depreciation = 0;
+		$depRes = new StandardCostResult();
+		if(isset($TugCost)){
+			$depreciation = $TugCost->depreciation_cost;
+		}else{
+
+		}
+		
+		if(isset($BargeCost)){
+			$depreciation = $depreciation + $BargeCost->depreciation_cost;
+		}else{
+		
+		}
+		//$TOTAL_DAY = StandardCostDB::getTotalDay();
+		//return $depreciation/$TOTAL_DAY;
+		return $depreciation;
+	}
+	
+	public static function getInsuranceCost($id_vessel_tug, $id_vessel_barge){
+		//5. Insurance - Cost
+		$TugCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		$BargeCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		//$TugCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		//$BargeCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		$total_insurance = 0;
+		if(isset($TugCost)){
+			//$insuranceRes->value = $TugCost->insurance;
+			$total_insurance = $TugCost->insurance;
+		}else{
+
+		}
+		
+		if(isset($BargeCost)){
+			$total_insurance = $total_insurance + $BargeCost->insurance;
+		}else{
+		}
+		
+		//$TOTAL_DAY = StandardCostDB::getTotalDay();
+		//return $total_insurance/$TOTAL_DAY;
+		return $total_insurance;
+	}
+	
+	public static function getRepairCost($id_vessel_tug, $id_vessel_barge){
+		$TugCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		$BargeCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		//$TugCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		//$BargeCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		$repairtotal = 0;
+		if(isset($TugCost)){
+			$repairtotal = $TugCost->repair;
+		}else{
+
+		}
+		
+		if(isset($BargeCost)){
+			//$repairRes->value = $repairRes->value+ $BargeCost->repair;
+			$repairtotal = $repairtotal + $BargeCost->repair;
+		}else{
+
+		}
+		
+		//$TOTAL_DAY = StandardCostDB::getTotalDay();
+		//return $repairtotal/$TOTAL_DAY;
+		return $repairtotal;
+	}
+	
+	public static function getDockingCost($id_vessel_tug, $id_vessel_barge){
+		$TugCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		$BargeCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		//$TugCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		//$BargeCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		$dockingtotal = 0;
+
+		if(isset($TugCost)){
+			$dockingtotal = $TugCost->docking;
+		}else{
+
+		}
+		
+		if(isset($BargeCost)){
+			$dockingtotal = $dockingtotal + $BargeCost->docking;
+		}else{
+
+		}
+		
+		//$TOTAL_DAY = StandardCostDB::getTotalDay();
+		//return $dockingtotal/$TOTAL_DAY;
+		return $dockingtotal;
+	}
+	
+	public static function getRentCost($id_vessel_tug, $id_vessel_barge){
+		$TugCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		$BargeCost = StandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		//$TugCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_tug));
+		//$BargeCost = SpStandardVesselCost::model()->findByAttributes(array('id_vessel'=>$id_vessel_barge));
+		$dockingtotal = 0;
+
+		if(isset($TugCost)){
+			$dockingtotal = $TugCost->rent_cost;
+		}else{
+
+		}
+		
+		if(isset($BargeCost)){
+			$dockingtotal = $dockingtotal + $BargeCost->rent_cost;
+		}else{
+
+		}
+		
+		//$TOTAL_DAY = StandardCostDB::getTotalDay();
+		//return $dockingtotal/$TOTAL_DAY;
+		return $dockingtotal;
+	}
+}
+
+class StandardCostResult{
+	var $value = 0;
+	var $notes = "";
+	var $url = "#";
+}	
+
+?>

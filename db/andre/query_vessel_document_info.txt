@@ -1,0 +1,1 @@
+ALTER TABLE `vessel_document_info` ADD `IsNotUsed` INT( 1 ) NOT NULL AFTER `IsPermanen` 

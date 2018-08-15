@@ -1,0 +1,264 @@
+<?php /* @var $this Controller */ ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="language" content="en" />
+   <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/css/iconcareerln.png" type="image/x-icon" /> 
+	
+	<!-- Base HREF -->
+	<?php if($_SERVER["SERVER_NAME"] == "203.215.48.86") { ?>
+	<base href="http://<?php echo $_SERVER["SERVER_NAME"].":80".Yii::app()->request->baseUrl;?>/index.php">
+	<?php } else{ ?>
+	<base href="http://<?php echo $_SERVER["SERVER_NAME"].":80".Yii::app()->request->baseUrl;?>/index.php">
+	<?php }?>
+
+	<!-- blueprint CSS framework -->
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/mainstyle.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
+
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/animate.css/animate.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/animate.css/animate.min.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap/css/bootstrap-yii.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap/css/jquery-ui-bootstrap.css"/>
+
+    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+</head>	
+
+<body id="page">
+
+
+<!-- -->
+<div class="container-fluid">
+
+
+	<div class="row-fluid">
+		<div class="span12">
+
+		
+	<!-- header -->
+	
+	<div id="header">
+		<div id="logo">
+			
+            <b><?php //echo CHtml::encode(Yii::app()->name); ?></b>
+            <img src ="<?php echo Yii::app()->request->baseUrl; ?>/images/layout/logotop.png" align = "left">
+
+			<?php
+			//Untuk sementara language di-hide dulu
+			/*
+            <?php $currentLang = Yii::app()->language;?>
+            <?php echo CHtml::form(); ?>
+            <div id="langdrop" align="right" style="font-size:14px; margin-right:15px; color:#555;"> <?php echo Yii::t('strings','Language'); ?> :
+            <?php echo CHtml::dropDownList('_lang', $currentLang, array(
+                'en' => 'English', 'id' => 'Indonesia'), array('submit' => '' , 'style'=>'width:120px; height:27px; margin-top:9px;')); ?>
+            </div>
+            <?php echo CHtml::endForm(); ?>
+			*/
+			?>
+         </div>
+	</div>
+	<!-- header -->
+
+		<!-- garis bawah -->
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+				</div>
+			</div>
+		</div>
+
+		</div>
+
+		
+	</div>
+
+</div>
+
+<!-- -->
+
+<div class="container-fluid">
+	<div class="row-fluid">
+
+		<div class="span9" style="margin-left:-5px; padding-right:15px; margin-bottom:-20px; margin-top:-40px">
+            <img src="images/layout/utama.png">
+		 <?php //echo $content; ?>
+		</div>	
+
+		<div class="span3" style="margin-left:20px; margin-top:-30px;">
+<!--side menu login-->		
+<center>
+<div class="border-login">
+
+<!-- login form-->
+<h4><?php echo Yii::t('strings','Please Login')?></h4>
+<?php $model=new LoginForm; ?>
+
+<?php /*$form = $this->beginWidget(
+    'bootstrap.widgets.TbActiveForm',
+    array(
+        'id' => 'verticalForm',
+        'action'=>$this->createUrl('site/login'), 
+        'enableClientValidation'=>true,
+		'clientOptions'=>array(
+		'validateOnSubmit'=>true,
+								),
+    )
+);
+*/
+$form = $this->beginWidget(
+    'bootstrap.widgets.TbActiveForm', array(
+        'id' => 'login-form',
+        //'type'=>'horizontal',
+        'enableClientValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+            'afterValidate' => 'js:function(form, data, hasError) {
+                if (!hasError){ 
+                    str = $("#login-form").serialize() + "&ajax=login-form";
+ 
+                    $.ajax({
+                        type: "POST",
+                        url: "' . Yii::app()->createUrl('site/login') . '",
+                        data: str,
+                        dataType: "json",
+                        beforeSend : function() {
+                            $("#login").attr("disabled",true);
+                        },
+                        success: function(data, status) {
+                            if(data.authenticated)
+                            {
+                                window.location = data.redirectUrl;
+                            }
+                            else
+                            {
+                                $.each(data, function(key, value) {
+                                    var div = "#"+key+"_em_";
+                                    $(div).text(value);
+                                    $(div).show();
+                                });
+                                $("#login").attr("disabled",false);
+                            }
+                        },
+                    });
+                    return false;
+                }
+            }',
+        ),
+    ));
+    ?>
+
+ <?php
+
+echo $form->textFieldRow(
+    $model,
+    'username',
+    array(
+        'class' => 'span12',
+        'prepend' => '<i class="icon-user2"></i>'
+    )
+);
+echo $form->passwordFieldRow(
+    $model,
+    'password',
+    array(
+        'class' => 'span12',
+        'prepend' => '<i class="icon-lock"></i>'
+    )
+);
+
+echo"<br>";
+
+$this->widget(
+    'bootstrap.widgets.TbButton',
+    array('buttonType' => 'submit', 'label' => Yii::t('strings','Login'))
+);
+
+ 
+$this->endWidget();
+unset($form); ?>
+
+<!-- end login form-->
+<?php if(Yii::app()->user->hasFlash('success')):?>
+  <div class = "animated flash">
+    <?
+    $this->widget('bootstrap.widgets.TbAlert', array(
+    'block' => true,
+    'fade' => true,
+    'closeText' => '&times;', // false equals no close link
+    'alerts' => array( // configurations per alert type
+        // success, info, warning, error or danger
+        'success' => array('closeText' => '&times;'), 
+    ),
+  ));
+    ?>
+</div>
+<?php endif; ?>
+
+<br>
+<br>
+<br>
+<!-- end ornamen tambahan-->
+
+<!-- br agar border login sesuai ke bawahnya-->
+<br>
+<br>
+<!-- br agar border login sesuai ke bawahnya-->
+
+
+
+
+
+<!-- end login form-->
+
+</div>		
+</center>
+
+	</div>
+<!-- end side menu login-->
+
+
+
+
+
+</div>
+</div>
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+		<div class="span12" style="width:100%; margin-left:0px;">
+			<div id="footerpml">
+                 <div id="logo2"></div>
+				<div id="footerpml-wrap">
+					<div id="logo"></div>
+
+					<p>&copy; 2011 - <?php echo date("Y");?> PATRIA Maritime Lines. All rights reserved.</p>
+				</div>
+			</div>
+		</div>
+        <div class="clear"> </div>
+
+
+
+</body>

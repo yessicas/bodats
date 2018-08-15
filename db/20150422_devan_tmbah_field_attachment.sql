@@ -1,0 +1,1 @@
+ALTER TABLE `fuel_consumption_daily` ADD `file_attachment` VARCHAR( 250 ) NOT NULL AFTER `NearestDistancePoint` ;
