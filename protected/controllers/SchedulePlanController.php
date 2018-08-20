@@ -35,13 +35,13 @@ class SchedulePlanController extends Controller
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 			'actions'=>array('create','update'),
 			'users'=>array('@'),
-			
+
 			*/
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','create','update', 'view'),
 				'roles'=>array('ADM','SUPER'),
 			),
-			
+
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('createsched'),
 				'roles'=>array('ADM','SUPER', 'VPC'),
@@ -63,7 +63,7 @@ class SchedulePlanController extends Controller
 			  echo $this->renderPartial('view',array('model'=>$this->loadModel($id)),true,true);//This will bring out the view along with its script.
 			  }
 
-	else 
+	else
 	$this->render('view',array(
 	'model'=>$this->loadModel($id),
 	));
@@ -94,18 +94,18 @@ class SchedulePlanController extends Controller
 				  echo $this->renderPartial('create',array('model'=>$model),true,true);//This will bring out the view along with its script.
 				  }
 
-		else 
+		else
 		$this->render('create',array(
 		'model'=>$model,
 		));
 	}
-	
+
 	public function actionCreatesched($vid, $date)
 	{
 		$model = SchedulePlan::model()->findByAttributes(array(
 			"VesselTugId"=>$vid,
 			"schedule_date"=>$date,
-		));		
+		));
 		if($model == null){
 			$model =new SchedulePlan;
 		}
@@ -115,24 +115,25 @@ class SchedulePlanController extends Controller
 		if(isset($_POST['SchedulePlan']))
 		{
 			$model->attributes=$_POST['SchedulePlan'];
-		
+
 			$model->sch_month = Timeanddate::getMonthOnly($date);
 			$model->sch_year =  Timeanddate::getYearOnly($date);
-			
+
 			$model = LogRegister::setUserCreated($model);
-	
+
 			if($model->save()){
-				// die("viko");
+				
 				Yii::app()->user->setFlash('success', "Activity plan saved!");
 				$this->redirect(
 					array('masterschedule/masterviewer',
-					'monthseacrh'=>$model->sch_month, 
+					'monthseacrh'=>$model->sch_month,
 					'yearseacrh'=>$model->sch_year));
 				//$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 			}
 		}
 		if(Yii::app()->request->getIsAjaxRequest())
 		{
+			 // die();
 			 echo $this->renderPartial('createsched',array('model'=>$model),true,true);//This will bring out the view along with its script.
 		}
 
@@ -169,7 +170,7 @@ class SchedulePlanController extends Controller
 			  echo $this->renderPartial('update',array('model'=>$model),true,true);//This will bring out the view along with its script.
 			  }
 
-	else 
+	else
 	$this->render('update',array(
 	'model'=>$model,
 	));

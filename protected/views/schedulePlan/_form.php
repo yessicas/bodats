@@ -17,7 +17,10 @@
 	<?php //echo $form->textFieldRow($model,'VesselBargeId',array('class'=>'span5')); ?>
 
 	<?php //echo $form->textFieldRow($model,'id_voyage_activity_group',array('class'=>'span5')); ?>
-	
+
+	<?php echo $form->dropDownListRow($model,'id_voyage_activity',CHtml::listData( VoyageMstActivity::model()->findAll(), 'id_voyage_activity', 'voyage_activity_desc'),
+		array('prompt'=>'--Select--','class'=>'span3'));?>
+
 	<?php echo $form->dropDownListRow($model,'id_voyage_activity_group',CHtml::listData( VoyageMstActivityGroup::model()->findAll(), 'id_voyage_activity_group', 'voyage_activity_group'),
     array('prompt'=>'--Select--','class'=>'span3'));?>
 
