@@ -82,6 +82,7 @@ class SchedulePlanController extends Controller
 
 		if(isset($_POST['SchedulePlan']))
 		{
+			die();
 		$model->attributes=$_POST['SchedulePlan'];
 		if($model->save()){
 		Yii::app()->user->setFlash('success', " Data Saved");
@@ -101,44 +102,33 @@ class SchedulePlanController extends Controller
 	
 	public function actionCreatesched($vid, $date)
 	{
-
 		$model = SchedulePlan::model()->findByAttributes(array(
 			"VesselTugId"=>$vid,
 			"schedule_date"=>$date,
-		));
-
-		$models = new MasterTemplateStandardCycle;
-		
+		));		
 		if($model == null){
 			$model =new SchedulePlan;
-			$model->VesselTugId = $vid;
-			$model->schedule_date = $date;
 		}
-		
+
+		$model->VesselTugId = $vid;
+		$model->schedule_date = $date;
 		if(isset($_POST['SchedulePlan']))
 		{
 			$model->attributes=$_POST['SchedulePlan'];
-			$x = $model->attributes;
-			var_dump($x);
-			
 		
 			$model->sch_month = Timeanddate::getMonthOnly($date);
 			$model->sch_year =  Timeanddate::getYearOnly($date);
-			$model = LogRegister::setUserCreated($model);
-
-			$models->id_mst_template = $x['id_mst_template'];
 			
-			if($model->save() && $models->save()){
+			$model = LogRegister::setUserCreated($model);
+	
+			if($model->save()){
 				// die("viko");
 				Yii::app()->user->setFlash('success', "Activity plan saved!");
 				$this->redirect(
 					array('masterschedule/masterviewer',
 					'monthseacrh'=>$model->sch_month, 
 					'yearseacrh'=>$model->sch_year));
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-			}else{
-				print_r($models->getErrors());
-				die();
+				//$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 			}
 		}
 		if(Yii::app()->request->getIsAjaxRequest())

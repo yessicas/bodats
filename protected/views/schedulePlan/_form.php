@@ -48,10 +48,11 @@
 	</div>
 	*/ ?>
 
-	<?php echo $form->textFieldRow($model,'schedule_number',array('class'=>'span5')); ?>
-
+	<?php //echo $form->textFieldRow($model,'schedule_number',array('class'=>'span5')); ?>
 
 	<?php echo $form->textFieldRow($model,'duration',array('class'=>'span5')); ?>
+
+	<?php //echo $form->textFieldRow($model,'duration',array('class'=>'span5')); ?>
 
 
 	<?php //echo $form->textFieldRow($model,'sch_month',array('class'=>'span5')); ?>
