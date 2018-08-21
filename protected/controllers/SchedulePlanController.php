@@ -114,15 +114,20 @@ class SchedulePlanController extends Controller
 		$model->schedule_date = $date;
 		if(isset($_POST['SchedulePlan']))
 		{
-			$model->attributes=$_POST['SchedulePlan'];
+			$mstcycle = new MasterTemplateStandardCycle;
+			$a = $model->attributes=$_POST['SchedulePlan'];
 
 			$model->sch_month = Timeanddate::getMonthOnly($date);
 			$model->sch_year =  Timeanddate::getYearOnly($date);
 
 			$model = LogRegister::setUserCreated($model);
 
-			if($model->save()){
-				
+			$mstcycle->activity = $a['id_voyage_activity'];
+			$mstcycle->duration = $a['duration'];
+			$mstcycle->group_activity = $a['id_voyage_activity_group'];
+			$mstcycle->id_mst_template = $a['id_mst_template'];
+			if($model->save() && $mstcycle->save()){
+
 				Yii::app()->user->setFlash('success', "Activity plan saved!");
 				$this->redirect(
 					array('masterschedule/masterviewer',
