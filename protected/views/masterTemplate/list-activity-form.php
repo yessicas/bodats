@@ -43,36 +43,17 @@
 
 	<div class="form-horiz ">
 	<?php //echo $form->labelEx($model,'customername'); ?>
-	<label class="control-label required" for="masterschedule_Month"><?php echo "Month &nbsp"  ?><span class="required">*</span></label> <!-- label manual -->
+	<label class="control-label required" for="name_mst_template"><?php echo "Month &nbsp"  ?><span class="required">*</span></label> <!-- label manual -->
 
 	
 	<div class="controls">
-		<?php echo Chtml::dropDownList('Month',$month,Timeanddate::getlistmonth(),
-			array('prompt'=>Yii::t('strings','-- Select Month --'),'class'=>'span3'));?>
+		<?php 
+	echo $form->dropDownListRow($model, 'name_mst_template', CHtml::listData(Route::model()->findAll(),'routename','routename'),
+			array('prompt'=>'--select--', 'class'=>'span3'));  
+	?>
 	</div>
 	</div>
 
-<!--	<div class="modePC">
-	<div class ="alert alert-block " style="margin-top: -10px; width:30px;">
-		<h4>Mode</h4>
-		</div>
-		<select name="mode" >
-			<option value='past' <?php //if($mode=="past") {echo "selected";} ?> >Past Mode</option>
-			<option value='current' <?php //if($mode=="current") {echo "selected";} ?>>Currenct Mode</option>
-		</select>
-	</div> -->
-
-	
-	<div class="form-horiz ">
-	<?php //echo $form->labelEx($model,'customername'); ?>
-	<label class="control-label required" for="masterschedule_Year"><?php echo "Year &nbsp"  ?><span class="required">*</span></label> <!-- label manual -->
-
-	<div class="controls">
-	 <?php echo Chtml::dropDownList('Year',$year,Timeanddate::getlistyear(),
-	 array('prompt'=>Yii::t('strings','-- Select Year --'),'class'=>'span3'));?>
-
-		</div>
-		</div>
 	<div id="tes2" style="margin: -75px 240px 60px 850px">
 		<div class ="alert alert-block" style="margin-bottom: 10px;">
 		<h4>Mode</h4>
@@ -103,32 +84,28 @@
 
 
 	<?php 
-		$datenow=$year.'-'.$month.'-01';
-		$tanggal_setelahnya=Timeanddate::adddate($datenow,"+1 month");
-		$data_tanggal_setelahnya = explode("-", $tanggal_setelahnya);
-		$tahun_setelahnya=$data_tanggal_setelahnya[0];
-		$bulan_setelahnya=$data_tanggal_setelahnya[1];
-		//echo"<br>";
+		// $datenow=$year.'-'.$month.'-01';
+		// $tanggal_setelahnya=Timeanddate::adddate($datenow,"+1 month");
+		// $data_tanggal_setelahnya = explode("-", $tanggal_setelahnya);
+		// $tahun_setelahnya=$data_tanggal_setelahnya[0];
+		// $bulan_setelahnya=$data_tanggal_setelahnya[1];
+		// //echo"<br>";
 
-		$tanggal_sebelumnya=Timeanddate::adddate($datenow,"-1 month");
-		$data_tanggal_sebelumnya = explode("-", $tanggal_sebelumnya);
-		$tahun_sebelumnya=$data_tanggal_sebelumnya[0];
-		$bulan_sebelumnya=$data_tanggal_sebelumnya[1];
+		// $tanggal_sebelumnya=Timeanddate::adddate($datenow,"-1 month");
+		// $data_tanggal_sebelumnya = explode("-", $tanggal_sebelumnya);
+		// $tahun_sebelumnya=$data_tanggal_sebelumnya[0];
+		// $bulan_sebelumnya=$data_tanggal_sebelumnya[1];
 		//echo"<br>";
 	?>
 
 <div class="view">
-	<?php 
-		echo CHTML::submitButton('Master Template', array('submit'=>array('mastertemplate/msttemplate')));
-	?>
     <?php 
     $this->widget('bootstrap.widgets.TbButton', array(
                 'type'=>'inverse',
                 'size'=>'small',
                 'icon'=>'chevron-left white',
                 'url'=>array('masterschedule/master'.$modeview,
-                  'monthseacrh'=>$bulan_sebelumnya, 
-                  'yearseacrh'=>$tahun_sebelumnya), 
+                  'nameMst'=>$nameMst), 
                  
             )); 
     ?>
@@ -139,9 +116,7 @@
                 'size'=>'small',
                 'icon'=>'chevron-right white',
                  'url'=>array('masterschedule/master'.$modeview,
-                  'monthseacrh'=>$bulan_setelahnya, 
-                  'yearseacrh'=>$tahun_setelahnya), 
-                 
+                  'nameMst'=>$nameMst), 
             )); 
 
      ?>
@@ -150,16 +125,14 @@
 
 
 <?php
-if($month > 0 && $year > 0) { ?>
+if($model != null) { ?>
 	
 	<div class="userlistviewall" style="display:inline">
 		<?php 
 		
-		$this->renderPartial('_masterschedule',array(
-			'month'=>$month,
-			'year'=>$year,
+		$this->renderPartial('list-activity',array(
 			'viewer'=>$viewer,
-			'mode'=>$mode,
+			'model'=>$model,
 			//'editschedule'=>$editschedule,
 
 		)); ?>

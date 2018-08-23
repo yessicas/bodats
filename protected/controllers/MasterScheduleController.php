@@ -28,7 +28,7 @@ class MasterScheduleController extends Controller {
                 'actions' => array('master', 'display', 'docking', 'displayMaster',
                     'addschedule',
                     'rejectschedule', 'rejectscheduleoffhired', 'rejectscheduleplan',
-                    'mastervessel'
+                    'mastervessel','msttemplate'
                 ),
                 'roles' => array('VPC', 'ADM'),
             ),

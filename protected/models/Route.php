@@ -92,4 +92,8 @@ class Route extends CActiveRecord
    								 ),
 		));
 	}
+
+	public function getRouteName(){
+		return $this->Place_first.' - '.$this->Place_second;
+	}
 }

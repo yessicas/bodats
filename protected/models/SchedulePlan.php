@@ -35,7 +35,7 @@ class SchedulePlan extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('VesselTugId, id_voyage_activity, id_voyage_activity_group, id_mst_template, schedule_date,duration, sch_month, sch_year, created_date, created_user, ip_user_updated', 'required'),
+			array('VesselTugId, id_voyage_activity, id_voyage_activity_group, schedule_date,sch_month, sch_year, created_date, created_user, ip_user_updated', 'required'),
 			array('VesselTugId, VesselBargeId, id_voyage_activity, id_voyage_activity_group, schedule_number, sch_month, sch_year', 'numerical', 'integerOnly'=>true),
 			array('created_user', 'length', 'max'=>45),
 			array('ip_user_updated', 'length', 'max'=>50),
@@ -55,7 +55,7 @@ class SchedulePlan extends CActiveRecord
 		return array(
 			'timesheetgroup' => array(self::BELONGS_TO, 'VoyageMstActivityGroup', 'id_voyage_activity_group'),
 			'timesheet' => array(self::BELONGS_TO, 'VoyageMstActivity', 'id_voyage_activity'),
-			'voyagegroup' => array(self::BELONGS_TO, 'MasterTemplate', 'id_mst_template'),
+			// 'voyagegroup' => array(self::BELONGS_TO, 'MasterTemplate', 'id_mst_template'),
 		);
 	}
 
@@ -70,7 +70,7 @@ class SchedulePlan extends CActiveRecord
 			'VesselBargeId' => 'Vessel Barge',
 			'id_voyage_activity' => 'Activity',
 			'id_voyage_activity_group' => 'Activity Grup',
-			'id_mst_template' => 'Rute',
+			// 'id_mst_template' => 'Rute',
 			'schedule_date' => 'Schedule Date',
 			'schedule_number' => 'Schedule Number',
 			'sch_month' => 'Sch Month',
@@ -78,7 +78,7 @@ class SchedulePlan extends CActiveRecord
 			'created_date' => 'Created Date',
 			'created_user' => 'Created User',
 			'ip_user_updated' => 'Ip User Updated',
-			'duration' => 'Durasi',
+			// 'duration' => 'Durasi',
 		);
 	}
 
